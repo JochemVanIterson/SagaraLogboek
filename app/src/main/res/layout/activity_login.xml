@@ -66,8 +66,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/login_user_edittext"
-                    android:inputType="textNoSuggestions"
-                    android:text="jochem.vaniterson" />
+                    android:inputType="textNoSuggestions" />
 
                 <EditText
                     android:id="@+id/PasswordET"

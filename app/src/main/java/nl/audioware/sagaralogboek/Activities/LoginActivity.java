@@ -34,14 +34,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        if(sharedPref.contains("MainURL")){
-            String ServerAddress = sharedPref.getString("MainURL", "");
+        if(sharedPref.contains("PW")){
+            String ServerAddress = sharedPref.getString("BaseUrl", "");
             ServerAddressET.setText(ServerAddress);
-            String User = sharedPref.getString("UserName", "");
+            String User = sharedPref.getString("User", "");
             UserET.setText(User);
-            String PasswordEnc = sharedPref.getString("PWEnc", "");
-            String iv = sharedPref.getString("personalIV", "");
-            NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv);
+            String PasswordEnc = sharedPref.getString("PW", "");
+            String iv = sharedPref.getString("iv", "");
+            NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv, key);
             loginRequest.get();
         }
     }
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         String Password = PasswordET.getText().toString();
         String iv = Encryption.getRandomString(16);
         String PasswordEnc = Encryption.encrypt(key, iv, Password);
-        NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv);
+        NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv, key);
         loginRequest.get();
         Log.d("LoginAttempt",
                 "Server: "+ServerAddress+

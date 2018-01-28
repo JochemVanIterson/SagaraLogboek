@@ -24,7 +24,7 @@ public class NGLoginRequest {
     DefaultNetGetter netGetter;
     ProgressDialog dialog;
 
-    public NGLoginRequest(final Activity activity, SharedPreferences prefs, String BaseUrl, String User, String PWEnc, String iv){
+    public NGLoginRequest(final Activity activity, SharedPreferences prefs, final String BaseUrl, final String User, final String PWEnc, final String iv, final String key){
         String url = BaseUrl + "Scripts/Login.php";
         dialog = new ProgressDialog(activity);
         dialog.setMessage("Logging in");
@@ -57,6 +57,20 @@ public class NGLoginRequest {
                             Snackbar.make(constraintLayout, JsonResponse.getString("message"), Snackbar.LENGTH_LONG).show();
                             Log.d("LoginAttempt", "failed, message: " + JsonResponse.getString("message"));
                         } else if(loginResponse.equals("success")){
+                            String PrivateIV = JsonResponse.getJSONObject("data").getString("iv");
+                            String DecryptedPW = Encryption.decrypt(key, iv, PWEnc);
+                            String PW = Encryption.encrypt(key, PrivateIV, DecryptedPW);
+                            Log.d("DecryptedPW", DecryptedPW);
+
+                            SharedPreferences Settings = activity.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor SettingsEditor = Settings.edit();
+                            SettingsEditor.putString("BaseUrl", BaseUrl);
+                            SettingsEditor.putString("User", User);
+                            SettingsEditor.putString("PW", PW);
+                            SettingsEditor.putString("iv", PrivateIV);
+
+                            SettingsEditor.apply();
+
                             Intent intent = new Intent(activity, MainActivity.class);
                             activity.startActivity(intent);
                         } else {
