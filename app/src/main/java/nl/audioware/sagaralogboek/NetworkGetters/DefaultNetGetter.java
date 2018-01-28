@@ -9,6 +9,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import nl.audioware.sagaralogboek.Libraries.MySingleton;

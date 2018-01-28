@@ -1,5 +1,7 @@
 package nl.audioware.sagaralogboek.Activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,12 +16,13 @@ import nl.audioware.sagaralogboek.R;
 public class LoginActivity extends AppCompatActivity {
     public EditText ServerAddressET, UserET, PasswordET;
     public Button LoginButton;
-    String key = "c7n4cct5pceu83y4";
+    String key = "kj0vbyrma8on3a9h";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        SharedPreferences sharedPref = getSharedPreferences("Settings", Context.MODE_PRIVATE);
         ServerAddressET = findViewById(R.id.ServerAddressET);
         UserET = findViewById(R.id.UserET);
         PasswordET = findViewById(R.id.PasswordET);
@@ -30,23 +33,34 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+        if(sharedPref.contains("MainURL")){
+            String ServerAddress = sharedPref.getString("MainURL", "");
+            ServerAddressET.setText(ServerAddress);
+            String User = sharedPref.getString("UserName", "");
+            UserET.setText(User);
+            String PasswordEnc = sharedPref.getString("PWEnc", "");
+            String iv = sharedPref.getString("personalIV", "");
+            NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv);
+            loginRequest.get();
+        }
     }
     void attemptLogin(){
         String ServerAddress = ServerAddressET.getText().toString();
         ServerAddress = fixURL(ServerAddress, false);
         String User = UserET.getText().toString();
         String Password = PasswordET.getText().toString();
-        byte[] iv = Encryption.generateIVSpec();
+        String iv = Encryption.getRandomString(16);
         String PasswordEnc = Encryption.encrypt(key, iv, Password);
-        boolean Success = false;
-        NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, Password);
+        NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv);
         loginRequest.get();
         Log.d("LoginAttempt",
                 "Server: "+ServerAddress+
                 "\nUser: "+User+
                 "\nPassword: "+Password+
                 "\nPasswordEnc: "+PasswordEnc+
-                "\nSuccess: "+Success
+                "\niv: "+iv+
+                "\npkey: "+key
         );
     }
 

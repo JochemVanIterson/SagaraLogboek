@@ -5,4 +5,6 @@
     <string name="login_user_edittext">User</string>
     <string name="login_password_edittext">Password</string>
     <string name="login_button">Login</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

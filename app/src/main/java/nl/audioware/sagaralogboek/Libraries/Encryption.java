@@ -1,8 +1,10 @@
 package nl.audioware.sagaralogboek.Libraries;
 
 import android.util.Base64;
+import android.util.Log;
 
 import java.security.SecureRandom;
+import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -26,7 +28,7 @@ public class Encryption {
      * @param data - data to encrypt
      * @return encryptedData data in base64 encoding with iv attached at end after a :
      */
-    public static String encrypt(String key, byte[] iv, String data) {
+    public static String encrypt(String key, String iv, String data) {
         try {
             if (key.length() < Encryption.CIPHER_KEY_LEN) {
                 int numPad = Encryption.CIPHER_KEY_LEN - key.length();
@@ -39,7 +41,7 @@ public class Encryption {
                 key = key.substring(0, CIPHER_KEY_LEN); //truncate to 16 bytes
             }
 
-            IvParameterSpec initVector = new IvParameterSpec(iv);
+            IvParameterSpec initVector = new IvParameterSpec(iv.getBytes("ISO-8859-1"));
             SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("ISO-8859-1"), "AES");
 
             Cipher cipher = Cipher.getInstance(Encryption.CIPHER_NAME);
@@ -48,9 +50,8 @@ public class Encryption {
             byte[] encryptedData = cipher.doFinal((data.getBytes()));
 
             String base64_EncryptedData = Base64.encodeToString(encryptedData, Base64.DEFAULT);
-            String base64_IV = Base64.encodeToString(iv, Base64.DEFAULT);
 
-            return base64_EncryptedData + ":" + base64_IV;
+            return base64_EncryptedData;
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -67,31 +68,26 @@ public class Encryption {
      * @return decrypted data string
      */
 
-    public static String decrypt(String key, String data) {
+    public static String decrypt(String key, String iv, String data) {
         try {
-
             if (key.length() < Encryption.CIPHER_KEY_LEN) {
                 int numPad = Encryption.CIPHER_KEY_LEN - key.length();
 
-                StringBuilder keyBuilder = new StringBuilder(key);
                 for(int i = 0; i < numPad; i++){
-                    keyBuilder.append("0"); //0 pad to len 16 bytes
+                    key += "0"; //0 pad to len 16 bytes
                 }
-                key = keyBuilder.toString();
 
             } else if (key.length() > Encryption.CIPHER_KEY_LEN) {
                 key = key.substring(0, CIPHER_KEY_LEN); //truncate to 16 bytes
             }
 
-            String[] parts = data.split(":");
-
-            IvParameterSpec iv = new IvParameterSpec(Base64.decode(parts[1], Base64.DEFAULT));
+            IvParameterSpec initVector = new IvParameterSpec(iv.getBytes("ISO-8859-1"));
             SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("ISO-8859-1"), "AES");
 
             Cipher cipher = Cipher.getInstance(Encryption.CIPHER_NAME);
-            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, initVector);
 
-            byte[] decodedEncryptedData = Base64.decode(parts[0], Base64.DEFAULT);
+            byte[] decodedEncryptedData = Base64.decode(data, Base64.NO_WRAP);
 
             byte[] original = cipher.doFinal(decodedEncryptedData);
 
@@ -102,6 +98,17 @@ public class Encryption {
 
         return null;
     }
+
+    private static final String ALLOWED_CHARACTERS ="0123456789abcdefghijklmnopqrstuvwxyz";
+
+    public static String getRandomString(final int sizeOfRandomString){
+        final Random random=new Random();
+        final StringBuilder sb=new StringBuilder(sizeOfRandomString);
+        for(int i=0;i<sizeOfRandomString;++i)
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+        return sb.toString();
+    }
+
     public static byte[] generateIVSpec(){
         SecureRandom r = new SecureRandom();
         byte[] ivBytes = new byte[16];
