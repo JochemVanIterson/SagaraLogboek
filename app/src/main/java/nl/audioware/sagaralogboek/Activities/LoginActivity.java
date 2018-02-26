@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        SharedPreferences sharedPref = getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.prefs_Main), Context.MODE_PRIVATE);
         ServerAddressET = findViewById(R.id.ServerAddressET);
         UserET = findViewById(R.id.UserET);
         PasswordET = findViewById(R.id.PasswordET);
@@ -41,8 +41,7 @@ public class LoginActivity extends AppCompatActivity {
             UserET.setText(User);
             String PasswordEnc = sharedPref.getString("PW", "");
             String iv = sharedPref.getString("iv", "");
-            NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv, key);
-            loginRequest.get();
+            new NGLoginRequest(this, ServerAddress, User, PasswordEnc, iv, key).get();
         }
     }
     void attemptLogin(){
@@ -52,8 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         String Password = PasswordET.getText().toString();
         String iv = Encryption.getRandomString(16);
         String PasswordEnc = Encryption.encrypt(key, iv, Password);
-        NGLoginRequest loginRequest = new NGLoginRequest(this, null, ServerAddress, User, PasswordEnc, iv, key);
-        loginRequest.get();
+        new NGLoginRequest(this, ServerAddress, User, PasswordEnc, iv, key).get();
         Log.d("LoginAttempt",
                 "Server: "+ServerAddress+
                 "\nUser: "+User+

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,20 +18,34 @@ import android.view.View;
 import java.util.ArrayList;
 
 import nl.audioware.sagaralogboek.Adapters.MainAdapter;
+import nl.audioware.sagaralogboek.NetworkGetters.NGDataGetter;
+
+import nl.audioware.sagaralogboek.Objects.Category;
+import nl.audioware.sagaralogboek.Objects.Item;
+
 import nl.audioware.sagaralogboek.R;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public static RecyclerView.Adapter mAdapter;
+    public static ArrayList<Category> Categories;
+    public static ArrayList<Item> Items;
     private RecyclerView.LayoutManager mLayoutManager;
+    private NGDataGetter DataGetter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        SharedPreferences Settings = getSharedPreferences(getString(R.string.prefs_Main), Context.MODE_PRIVATE);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Categories = new ArrayList<>();
+        Items = new ArrayList<>();
+
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -49,15 +64,19 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        ArrayList<String> myDataset = new ArrayList<>();
-        myDataset.add("Test 1");
-        myDataset.add("Test 2");
-        myDataset.add("Test 3");
-        myDataset.add("Test 4");
+        DataGetter = new NGDataGetter(this, Settings.getString("BaseUrl", ""), Settings.getString("User", ""), Settings.getString("iv", ""));
+        DataGetter.get();
 
-        // specify an adapter (see also next example)
-        mAdapter = new MainAdapter(myDataset);
+        mAdapter = new MainAdapter(this, Categories);
         mRecyclerView.setAdapter(mAdapter);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                DataGetter.get();
+            }
+        });
     }
 
     @Override

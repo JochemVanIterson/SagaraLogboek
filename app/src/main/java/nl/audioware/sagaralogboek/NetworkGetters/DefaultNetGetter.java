@@ -51,6 +51,7 @@ public class DefaultNetGetter {
 
             @Override
             public void retry(VolleyError error) throws VolleyError {
+                Log.d("VolleyError", error.getMessage());
             }
         });
     }

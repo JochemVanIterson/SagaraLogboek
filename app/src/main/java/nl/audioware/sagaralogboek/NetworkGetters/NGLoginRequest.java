@@ -24,7 +24,7 @@ public class NGLoginRequest {
     DefaultNetGetter netGetter;
     ProgressDialog dialog;
 
-    public NGLoginRequest(final Activity activity, SharedPreferences prefs, final String BaseUrl, final String User, final String PWEnc, final String iv, final String key){
+    public NGLoginRequest(final Activity activity, final String BaseUrl, final String User, final String PWEnc, final String iv, final String key){
         String url = BaseUrl + "Scripts/Login.php";
         dialog = new ProgressDialog(activity);
         dialog.setMessage("Logging in");
@@ -62,7 +62,7 @@ public class NGLoginRequest {
                             String PW = Encryption.encrypt(key, PrivateIV, DecryptedPW);
                             Log.d("DecryptedPW", DecryptedPW);
 
-                            SharedPreferences Settings = activity.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+                            SharedPreferences Settings = activity.getSharedPreferences(context.getString(R.string.prefs_Main), Context.MODE_PRIVATE);
                             SharedPreferences.Editor SettingsEditor = Settings.edit();
                             SettingsEditor.putString("BaseUrl", BaseUrl);
                             SettingsEditor.putString("User", User);

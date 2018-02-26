@@ -5,6 +5,7 @@
     <string name="login_user_edittext">User</string>
     <string name="login_password_edittext">Password</string>
     <string name="login_button">Login</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Logboek</string>
     <string name="action_settings">Settings</string>
+    <string name="prefs_Main">nl.audioware.sagaralogger.MainPrefs</string>
 </resources>
