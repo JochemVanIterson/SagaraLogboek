@@ -26,6 +26,7 @@ import java.util.Map;
 
 import nl.audioware.sagaralogboek.Activities.MainActivity;
 import nl.audioware.sagaralogboek.Libraries.Encryption;
+import nl.audioware.sagaralogboek.Libraries.FileHandler;
 import nl.audioware.sagaralogboek.Objects.Category;
 import nl.audioware.sagaralogboek.Objects.Item;
 import nl.audioware.sagaralogboek.Objects.ItemComparator;
@@ -39,16 +40,6 @@ public class NGDataGetter {
     public NGDataGetter(final Activity activity, final String BaseUrl, final String User, final String iv){
         mSwipeRefreshLayout = activity.findViewById(R.id.swipeRefreshLayout);
         String url = BaseUrl + "Scripts/AndroidGetters.php";
-        //dialog = new ProgressDialog(activity);
-        //dialog.setMessage("Retrieving data");
-        //dialog.setIndeterminate(true);
-        //dialog.setCancelable(true);
-        //dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-        //    @Override
-        //    public void onCancel(DialogInterface dialog) {
-        //        netGetter.cancelRequest();
-        //    }
-        //});
 
         Map<String,String> params = new HashMap<String, String>();
         params.put("username", User);
@@ -59,7 +50,9 @@ public class NGDataGetter {
             public void ActionDone(String response, final Context context){
                 try {
                     //dialog.cancel();
-                    mSwipeRefreshLayout.setRefreshing(false);
+                    if(mSwipeRefreshLayout!=null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
                     Log.d("DataGetter", response);
                     JSONObject JsonResponse = new JSONObject(response);
                     ConstraintLayout constraintLayout = activity.findViewById(R.id.login_constrain);
@@ -73,26 +66,36 @@ public class NGDataGetter {
                         Log.d("CacheImageF", CacheImagesFolder.getAbsolutePath());
                         JSONObject data = JsonResponse.getJSONObject("data");
                         try {
-                            WriteFile(new File(CacheDataFolder, "user_data.json"), data.getJSONObject("user_data").toString());
+                            new FileHandler().WriteFile(new File(CacheDataFolder, "user_data.json"), data.getJSONObject("user_data").toString());
 
-                            if(data.has("users")) WriteFile(new File(CacheAdminFolder, "users.json"), data.getJSONArray("users").toString());
+                            new FileHandler().WriteFile(new File(CacheDataFolder, "users.json"), data.getJSONArray("users").toString());
 
                             JSONArray categories = data.getJSONArray("categories");
                             categories = FixImageCache(categories, CacheImagesFolder, "category");
-                            MainActivity.Categories.clear();
-                            for (int i = 0; i < categories.length(); i++) {
-                                MainActivity.Categories.add(new Category(categories.getJSONObject(i)));
-                            }
-                            WriteFile(new File(CacheDataFolder, "categories.json"), categories.toString());
+                            //MainActivity.Categories.clear();
+                            //for (int i = 0; i < categories.length(); i++) {
+                            //    Category tmpCat = new Category(categories.getJSONObject(i));
+                            //    MainActivity.Categories.add(tmpCat);
+                            //}
+                            new FileHandler().WriteFile(new File(CacheDataFolder, "categories.json"), categories.toString());
 
                             JSONArray items = data.getJSONArray("items");
                             items = FixImageCache(items, CacheImagesFolder, "item");
-                            MainActivity.Items.clear();
-                            for (int i = 0; i < items.length(); i++) {
-                                MainActivity.Items.add(new Item(items.getJSONObject(i)));
-                            }
-                            Collections.sort(MainActivity.Items, new ItemComparator());
-                            WriteFile(new File(CacheDataFolder, "items.json"), items.toString());
+                            //MainActivity.Items.clear();
+                            //for (int i = 0; i < items.length(); i++) {
+                            //    MainActivity.Items.add(new Item(items.getJSONObject(i)));
+                            //}
+                            //Collections.sort(MainActivity.Items, new ItemComparator());
+                            new FileHandler().WriteFile(new File(CacheDataFolder, "items.json"), items.toString());
+
+
+                            // TODO: Favorite/pinned elements on top
+                            //MainActivity.Card_itms.clear();
+                            //for (int i = 0; i < categories.length(); i++) {
+                            //    Category tmpCat = new Category(categories.getJSONObject(i));
+                            //    MainActivity.Card_itms.add(tmpCat.toCard());
+                            //}
+                            MainActivity.includeFromFile(context);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -108,20 +111,22 @@ public class NGDataGetter {
             @Override
             public void get(String tag){
                 //dialog.show();
-                mSwipeRefreshLayout.setRefreshing(true);
+                if(mSwipeRefreshLayout!=null) {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
                 super.get(tag);
             }
         };
     }
 
-    private void WriteFile(File outputFile, String data) throws IOException {
-        File parent = outputFile.getParentFile();
-        parent.mkdirs();
-        OutputStream outputStream;
-        outputStream = new FileOutputStream(outputFile);
-        outputStream.write(data.getBytes());
-        outputStream.close();
-    }
+    //private void WriteFile(File outputFile, String data) throws IOException {
+    //    File parent = outputFile.getParentFile();
+    //    parent.mkdirs();
+    //    OutputStream outputStream;
+    //    outputStream = new FileOutputStream(outputFile);
+    //    outputStream.write(data.getBytes());
+    //    outputStream.close();
+    //}
 
     private JSONArray FixImageCache(JSONArray array, File Folder, String prefix) throws IOException, JSONException {
         // Create image cache and remove image data from category array
@@ -133,7 +138,7 @@ public class NGDataGetter {
                 String dataDecoded = new String(Base64.decode(data, Base64.DEFAULT), "UTF-8");
                 if(!dataDecoded.equals("null") && !dataDecoded.equals("") && !dataDecoded.equals(null)){
                     File ImageFile = new File(Folder, prefix + jsonObject.getInt("id") + ".svg");
-                    WriteFile(ImageFile, dataDecoded);
+                    new FileHandler().WriteFile(ImageFile, dataDecoded);
                     array.getJSONObject(i).put("icon_vector", ImageFile.getAbsolutePath());
                 }
             }

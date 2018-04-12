@@ -60,7 +60,6 @@ public class NGLoginRequest {
                             String PrivateIV = JsonResponse.getJSONObject("data").getString("iv");
                             String DecryptedPW = Encryption.decrypt(key, iv, PWEnc);
                             String PW = Encryption.encrypt(key, PrivateIV, DecryptedPW);
-                            Log.d("DecryptedPW", DecryptedPW);
 
                             SharedPreferences Settings = activity.getSharedPreferences(context.getString(R.string.prefs_Main), Context.MODE_PRIVATE);
                             SharedPreferences.Editor SettingsEditor = Settings.edit();

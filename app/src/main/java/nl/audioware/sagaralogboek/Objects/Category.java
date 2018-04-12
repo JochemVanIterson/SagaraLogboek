@@ -25,4 +25,8 @@ public class Category {
     public String getName() {return name;}
     public String getImageURL() {return imageURL;}
     public JSONArray getData() {return data;}
+    public Card_itm toCard(){
+        Card_itm card_itm = new Card_itm(id, name, imageURL, "large", this);
+        return card_itm;
+    }
 }

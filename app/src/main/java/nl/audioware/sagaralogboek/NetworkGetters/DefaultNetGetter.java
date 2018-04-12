@@ -30,6 +30,7 @@ public class DefaultNetGetter {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                ActionError(context, error);
                 Log.d("JsonArrayRequest", error.toString());
             }
         }){
@@ -59,6 +60,10 @@ public class DefaultNetGetter {
     public void get(String tag){
         strRequest.setTag(tag);
         MySingleton.getInstance(context).addToRequestQueue(strRequest);
+    }
+
+    public void ActionError(Context context, VolleyError error){
+
     }
 
     public void ActionDone(String response, Context context){

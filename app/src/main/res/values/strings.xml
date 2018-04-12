@@ -8,4 +8,9 @@
     <string name="title_activity_main">Logboek</string>
     <string name="action_settings">Settings</string>
     <string name="prefs_Main">nl.audioware.sagaralogger.MainPrefs</string>
+    <string name="prefs_Pub">nl.audioware.sagaralogger.PubPrefs</string>
+    <string name="title_activity_item">ItemActivity</string>
+    <string name="action_fav_title">Favorite</string>
+    <string name="notification_status_title">Aan het varen</string>
+    <string name="notification_status_message">De boot \"%1$s\" is aan het varen</string>
 </resources>

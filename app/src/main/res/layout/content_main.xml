@@ -14,15 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:paddingTop="5dp"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/card_default" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingTop="5dp"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/card_default" />
         <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
