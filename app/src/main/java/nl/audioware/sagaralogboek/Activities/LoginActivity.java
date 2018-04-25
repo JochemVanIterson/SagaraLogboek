@@ -16,7 +16,8 @@ import nl.audioware.sagaralogboek.R;
 public class LoginActivity extends AppCompatActivity {
     public EditText ServerAddressET, UserET, PasswordET;
     public Button LoginButton;
-    String key = "kj0vbyrma8on3a9h";
+    String key = "35kphy4y60lesiui";
+    String keyDBG = "kj0vbyrma8on3a9h";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +36,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         if(sharedPref.contains("PW")){
-            String ServerAddress = sharedPref.getString("BaseUrl", "");
-            ServerAddressET.setText(ServerAddress);
             String User = sharedPref.getString("User", "");
+            String ServerAddress;
+            if(User.charAt(0)=='_'){
+                ServerAddress = "http://audioware.nl/WebTest/SagaraLogboek/";
+                User = User.substring(1);
+                key = keyDBG;
+            } else {
+                ServerAddress = "http://sagara.nl/logboek/";
+            }
+            ServerAddressET.setText(ServerAddress);
             UserET.setText(User);
             String PasswordEnc = sharedPref.getString("PW", "");
             String iv = sharedPref.getString("iv", "");
@@ -45,9 +53,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     void attemptLogin(){
-        String ServerAddress = ServerAddressET.getText().toString();
-        ServerAddress = fixURL(ServerAddress, false);
+        String ServerAddress;
         String User = UserET.getText().toString();
+        if(User.charAt(0)=='_'){
+            ServerAddress = "http://www.audioware.nl/webtest/SagaraLogboek/";
+            User = User.substring(1);
+            key = keyDBG;
+        } else {
+            ServerAddress = "http://sagara.nl/logboek/";
+        }
         String Password = PasswordET.getText().toString();
         String iv = Encryption.getRandomString(16);
         String PasswordEnc = Encryption.encrypt(key, iv, Password);

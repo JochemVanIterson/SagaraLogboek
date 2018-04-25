@@ -30,10 +30,21 @@
         <activity
             android:name=".Activities.CategoryActivity"
             android:parentActivityName=".Activities.MainActivity" />
-        <activity
-            android:name=".Activities.ItemActivity" />
+        <activity android:name=".Activities.ItemActivity" />
 
-        <service android:name=".Services.SenderService" android:process=":sender_service" />
+        <service
+            android:name=".Services.SenderService"
+            android:process=":sender_service" />
+
+        <activity
+            android:name=".Activities.AdminActivity"
+            android:label="@string/title_activity_admin"
+            android:parentActivityName=".Activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nl.audioware.sagaralogboek.Activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

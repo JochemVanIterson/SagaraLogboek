@@ -1,9 +1,11 @@
 package nl.audioware.sagaralogboek.Activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Item> Items = new ArrayList<>();
     public static ArrayList<User> Users = new ArrayList<>();
     public static ArrayList<Card_itm> Card_itms = new ArrayList<>();
+    public static JSONObject User_data;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private NGDataGetter DataGetter;
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         DataGetter = new NGDataGetter(this, Settings.getString("BaseUrl", ""), Settings.getString("User", ""), Settings.getString("iv", ""));
         DataGetter.get();
 
+
         File Lockfile = new File(getFilesDir(), "lockfile");
         Log.d("Lockfile", Lockfile.getAbsolutePath());
 
@@ -142,6 +146,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        invalidateOptionsMenu();
+        if(User_data.optInt("admin", 0)==1){
+            MenuItem item = (MenuItem) menu.findItem(R.id.action_admin);
+            item.setVisible(true);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -155,6 +169,9 @@ public class MainActivity extends AppCompatActivity {
                 SettingsEditor.apply();
                 finish();
                 return true;
+            case R.id.action_admin:
+                Intent AdminIntent = new Intent(this, AdminActivity.class);
+                startActivity(AdminIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -165,10 +182,12 @@ public class MainActivity extends AppCompatActivity {
         String categoriesFileData = new FileHandler().readFromFile(new File(CacheDataFolder, "categories.json"));
         String itemsFileData = new FileHandler().readFromFile(new File(CacheDataFolder, "items.json"));
         String usersFileData = new FileHandler().readFromFile(new File(CacheDataFolder, "users.json"));
+        String userFileData = new FileHandler().readFromFile(new File(CacheDataFolder, "user_data.json"));
         try {
             JSONArray categoriesArray = new JSONArray(categoriesFileData);
             JSONArray itemsArray = new JSONArray(itemsFileData);
             JSONArray usersArray = new JSONArray(usersFileData);
+            User_data = new JSONObject(userFileData);
             Categories.clear();
             Items.clear();
             Users.clear();
@@ -183,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                 tmpItm.setCategory(new FileHandler().getCategory(context, tmpObject.optInt("category_id")));
                 tmpItm.setSailingUser(new FileHandler().getUser(context, tmpObject.optInt("sailing_user")));
                 Items.add(tmpItm);
-
             }
             Collections.sort(Items, new ItemComparator());
 
