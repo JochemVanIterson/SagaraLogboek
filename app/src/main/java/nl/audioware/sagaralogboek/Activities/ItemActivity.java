@@ -6,18 +6,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,15 +29,12 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.EntryXComparator;
+
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.annotations.Polyline;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -58,19 +50,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
-import nl.audioware.sagaralogboek.Adapters.ItemAdapter;
 import nl.audioware.sagaralogboek.Adapters.mapAdapter;
 import nl.audioware.sagaralogboek.Dialogs.startDialog;
 import nl.audioware.sagaralogboek.Dialogs.stopDialog;
 import nl.audioware.sagaralogboek.Libraries.FileHandler;
 import nl.audioware.sagaralogboek.Libraries.svgandroid.SVG;
 import nl.audioware.sagaralogboek.Libraries.svgandroid.SVGParser;
-import nl.audioware.sagaralogboek.NetworkGetters.NGGetEntry;
 import nl.audioware.sagaralogboek.NetworkGetters.NGGetItem;
 import nl.audioware.sagaralogboek.Objects.DbEntry;
 import nl.audioware.sagaralogboek.Objects.Item;
@@ -109,6 +97,7 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         // *********************** UI setup *********************** //
         super.onCreate(savedInstanceState);
+        Mapbox.getInstance(this, "pk.eyJ1Ijoiam9uYXNvbjEyMyIsImEiOiJjaXEzdDZqaTkwMDc5aHJtMmxtamUybGZ4In0.dCDpvuXzdNAWidXp-q3BzQ");
         context = this;
 
         ItemID = getIntent().getIntExtra("ItemID", -1);
@@ -160,8 +149,8 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // *********************** Map *********************** //
         mapView = (MapView) findViewById(R.id.mapView);
+
         mapView.onCreate(savedInstanceState);
-        Mapbox.getInstance(this, "pk.eyJ1Ijoiam9uYXNvbjEyMyIsImEiOiJjaXEzdDZqaTkwMDc5aHJtMmxtamUybGZ4In0.dCDpvuXzdNAWidXp-q3BzQ");
         mapView.getMapAsync(this);
 
         // *********************** Map List *********************** //
@@ -487,13 +476,16 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         if(latLngs.size()==1){
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(latLngs.get(0));
+            MarkerOptions markerOptions = new MarkerOptions().position(latLngs.get(0));
 
             mapboxMap.addMarker(markerOptions);
 
-            mapboxMap.setZoom(18);
-            mapboxMap.animateCamera(CameraUpdateFactory.newLatLng(latLngs.get(0)));
+            CameraPosition position = new CameraPosition.Builder()
+                    .target(latLngs.get(0)) // Sets the new camera position
+                    .zoom(18) // Sets the zoom to level 10
+                    .build(); // Builds the CameraPosition object from the builder
+
+            mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 100);
         } else if(latLngs.size()>1){
             PolylineOptions polylineOptions = new PolylineOptions()
                     .addAll(latLngs)

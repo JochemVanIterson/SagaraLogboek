@@ -39,12 +39,11 @@
         <activity
             android:name=".Activities.AdminActivity"
             android:label="@string/title_activity_admin"
-            android:parentActivityName=".Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="nl.audioware.sagaralogboek.Activities.MainActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.BigMapActivity"
+            android:label="@string/title_activity_big_map"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
