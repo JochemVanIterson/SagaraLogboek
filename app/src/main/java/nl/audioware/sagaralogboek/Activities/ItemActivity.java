@@ -31,16 +31,16 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.EntryXComparator;
 
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.annotations.PolylineOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.geometry.LatLngBounds;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+//import com.mapbox.mapboxsdk.Mapbox;
+//import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+//import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+//import com.mapbox.mapboxsdk.camera.CameraPosition;
+//import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+//import com.mapbox.mapboxsdk.geometry.LatLng;
+//import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+//import com.mapbox.mapboxsdk.maps.MapView;
+//import com.mapbox.mapboxsdk.maps.MapboxMap;
+//import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +65,7 @@ import nl.audioware.sagaralogboek.Objects.Item;
 import nl.audioware.sagaralogboek.Objects.User;
 import nl.audioware.sagaralogboek.R;
 
-public class ItemActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ItemActivity extends AppCompatActivity {
     int ItemID;
     public static Item item;
 
@@ -80,16 +80,16 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private LineChart mChart;
 
-    private MapView mapView;
-    private MapboxMap mapboxMap;
+    //private MapView mapView;
+    //private MapboxMap mapboxMap;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    public  RecyclerView.Adapter mAdapter;
+    //private RecyclerView mRecyclerView;
+    //private RecyclerView.LayoutManager mLayoutManager;
+    //public  RecyclerView.Adapter mAdapter;
 
     public ArrayList<DbEntry> MapEntries = new ArrayList<>();
-    public ArrayList<DbEntry> MapEntriesVisible = new ArrayList<>();
-    public int VisibleEntries = 2;
+    //public ArrayList<DbEntry> MapEntriesVisible = new ArrayList<>();
+    //public int VisibleEntries = 2;
 
     Context context;
 
@@ -97,7 +97,7 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         // *********************** UI setup *********************** //
         super.onCreate(savedInstanceState);
-        Mapbox.getInstance(this, "pk.eyJ1Ijoiam9uYXNvbjEyMyIsImEiOiJjaXEzdDZqaTkwMDc5aHJtMmxtamUybGZ4In0.dCDpvuXzdNAWidXp-q3BzQ");
+        //Mapbox.getInstance(this, "pk.eyJ1Ijoiam9uYXNvbjEyMyIsImEiOiJjaXEzdDZqaTkwMDc5aHJtMmxtamUybGZ4In0.dCDpvuXzdNAWidXp-q3BzQ");
         context = this;
 
         ItemID = getIntent().getIntExtra("ItemID", -1);
@@ -148,18 +148,18 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         // *********************** Map *********************** //
-        mapView = (MapView) findViewById(R.id.mapView);
-
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
-
-        // *********************** Map List *********************** //
-        mRecyclerView = findViewById(R.id.mapRecyclerView);
-        mRecyclerView.setHasFixedSize(false);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new mapAdapter(this, MapEntriesVisible);
-        mRecyclerView.setAdapter(mAdapter);
+        //mapView = (MapView) findViewById(R.id.mapView);
+        //
+        //mapView.onCreate(savedInstanceState);
+        //mapView.getMapAsync(this);
+        //
+        //// *********************** Map List *********************** //
+        //mRecyclerView = findViewById(R.id.mapRecyclerView);
+        //mRecyclerView.setHasFixedSize(false);
+        //mLayoutManager = new LinearLayoutManager(this);
+        //mRecyclerView.setLayoutManager(mLayoutManager);
+        //mAdapter = new mapAdapter(this, MapEntriesVisible);
+        //mRecyclerView.setAdapter(mAdapter);
 
 
         // *********************** Fab button *********************** //
@@ -232,39 +232,39 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         loadChart(!found);
 
-        // *********************** Map List *********************** //
-        MapEntriesVisible.clear();
-        for (int i = 0; i <VisibleEntries ; i++) {
-            Log.d("VisibleEntries", String.valueOf(VisibleEntries));
-            if(i<MapEntries.size()){
-                MapEntriesVisible.add(MapEntries.get(i));
-            }
-        }
-        mAdapter.notifyDataSetChanged();
-
-        if(MapEntriesVisible.size()==0){
-            TextView EntryEmptyTV = findViewById(R.id.EntryEmpty);
-            EntryEmptyTV.setVisibility(View.VISIBLE);
-        }
-
-        final Button loadMoreButton = findViewById(R.id.but_loadmore);
-        loadMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MapEntriesVisible.clear();
-                VisibleEntries += 5;
-                for (int i = 0; i <VisibleEntries ; i++) {
-                    if(i<MapEntries.size()){
-                        MapEntriesVisible.add(MapEntries.get(i));
-                    }
-                }
-                if(VisibleEntries>=MapEntries.size()){
-                    loadMoreButton.setEnabled(false);
-                    loadMoreButton.setText("No more data");
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+        //// *********************** Map List *********************** //
+        //MapEntriesVisible.clear();
+        //for (int i = 0; i <VisibleEntries ; i++) {
+        //    Log.d("VisibleEntries", String.valueOf(VisibleEntries));
+        //    if(i<MapEntries.size()){
+        //        MapEntriesVisible.add(MapEntries.get(i));
+        //    }
+        //}
+        //mAdapter.notifyDataSetChanged();
+        //
+        //if(MapEntriesVisible.size()==0){
+        //    TextView EntryEmptyTV = findViewById(R.id.EntryEmpty);
+        //    EntryEmptyTV.setVisibility(View.VISIBLE);
+        //}
+        //
+        //final Button loadMoreButton = findViewById(R.id.but_loadmore);
+        //loadMoreButton.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        MapEntriesVisible.clear();
+        //        VisibleEntries += 5;
+        //        for (int i = 0; i <VisibleEntries ; i++) {
+        //            if(i<MapEntries.size()){
+        //                MapEntriesVisible.add(MapEntries.get(i));
+        //            }
+        //        }
+        //        if(VisibleEntries>=MapEntries.size()){
+        //            loadMoreButton.setEnabled(false);
+        //            loadMoreButton.setText("No more data");
+        //        }
+        //        mAdapter.notifyDataSetChanged();
+        //    }
+        //});
 
     }
 
@@ -459,49 +459,49 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public void drawLineMap(ArrayList<LatLng> latLngsRaw, boolean set){
-        mapboxMap.clear();
-
-        TextView emptyChart = findViewById(R.id.mapEmpty);
-        if(latLngsRaw.size()==0){
-            emptyChart.setVisibility(View.VISIBLE);
-        } else {
-            emptyChart.setVisibility(View.GONE);
-        }
-
-        ArrayList<LatLng> latLngs = new ArrayList<>();
-        for (int i = 0; i <latLngsRaw.size() ; i++) {
-            LatLng TmpLatLng = latLngsRaw.get(i);
-            if(!latLngs.contains(TmpLatLng))latLngs.add(TmpLatLng);
-        }
-
-        if(latLngs.size()==1){
-            MarkerOptions markerOptions = new MarkerOptions().position(latLngs.get(0));
-
-            mapboxMap.addMarker(markerOptions);
-
-            CameraPosition position = new CameraPosition.Builder()
-                    .target(latLngs.get(0)) // Sets the new camera position
-                    .zoom(18) // Sets the zoom to level 10
-                    .build(); // Builds the CameraPosition object from the builder
-
-            mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 100);
-        } else if(latLngs.size()>1){
-            PolylineOptions polylineOptions = new PolylineOptions()
-                    .addAll(latLngs)
-                    .color(getResources().getColor(R.color.colorAccent))
-                    .width(3);
-
-            LatLngBounds.Builder latLngBounds = new LatLngBounds.Builder();
-            mapboxMap.addPolyline(polylineOptions);
-
-            latLngBounds.includes(latLngs);
-
-            Log.d("latLngs", String.valueOf(latLngs.size()));
-
-            mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds.build(), 50));
-        }
-    }
+    //public void drawLineMap(ArrayList<LatLng> latLngsRaw, boolean set){
+    //    mapboxMap.clear();
+    //
+    //    TextView emptyChart = findViewById(R.id.mapEmpty);
+    //    if(latLngsRaw.size()==0){
+    //        emptyChart.setVisibility(View.VISIBLE);
+    //    } else {
+    //        emptyChart.setVisibility(View.GONE);
+    //    }
+    //
+    //    ArrayList<LatLng> latLngs = new ArrayList<>();
+    //    for (int i = 0; i <latLngsRaw.size() ; i++) {
+    //        LatLng TmpLatLng = latLngsRaw.get(i);
+    //        if(!latLngs.contains(TmpLatLng))latLngs.add(TmpLatLng);
+    //    }
+    //
+    //    if(latLngs.size()==1){
+    //        MarkerOptions markerOptions = new MarkerOptions().position(latLngs.get(0));
+    //
+    //        mapboxMap.addMarker(markerOptions);
+    //
+    //        CameraPosition position = new CameraPosition.Builder()
+    //                .target(latLngs.get(0)) // Sets the new camera position
+    //                .zoom(18) // Sets the zoom to level 10
+    //                .build(); // Builds the CameraPosition object from the builder
+    //
+    //        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 100);
+    //    } else if(latLngs.size()>1){
+    //        PolylineOptions polylineOptions = new PolylineOptions()
+    //                .addAll(latLngs)
+    //                .color(getResources().getColor(R.color.colorAccent))
+    //                .width(3);
+    //
+    //        LatLngBounds.Builder latLngBounds = new LatLngBounds.Builder();
+    //        mapboxMap.addPolyline(polylineOptions);
+    //
+    //        latLngBounds.includes(latLngs);
+    //
+    //        Log.d("latLngs", String.valueOf(latLngs.size()));
+    //
+    //        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds.build(), 50));
+    //    }
+    //}
 
     public Drawable svgFileDrawable(File dataFile) throws FileNotFoundException {
         FileInputStream inputStream = new FileInputStream(dataFile);
@@ -587,58 +587,58 @@ public class ItemActivity extends AppCompatActivity implements OnMapReadyCallbac
         newFragment.show(activity.getFragmentManager(), "stopDialog" + item.getId());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mapView.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapView.onStop();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onMapReady(MapboxMap mapboxMap) {
-        this.mapboxMap = mapboxMap;
-        mapboxMap.getUiSettings().setAllGesturesEnabled(false);
-        mapboxMap.getUiSettings().setAttributionEnabled(false);
-        mapboxMap.getUiSettings().setLogoEnabled(false);
-        mapboxMap.setMaxZoomPreference(18);
-
-        MapEntriesVisible.get(0).setSelected(true);
-        drawLineMap(MapEntries.get(0).getLatLngs(), true);
-        mAdapter.notifyDataSetChanged();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        mapView.onStart();
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        mapView.onResume();
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        mapView.onPause();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        mapView.onStop();
+//    }
+//
+//    @Override
+//    public void onLowMemory() {
+//        super.onLowMemory();
+//        mapView.onLowMemory();
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        mapView.onDestroy();
+//    }
+//
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        mapView.onSaveInstanceState(outState);
+//    }
+//
+//    @Override
+//    public void onMapReady(MapboxMap mapboxMap) {
+//        this.mapboxMap = mapboxMap;
+//        mapboxMap.getUiSettings().setAllGesturesEnabled(false);
+//        mapboxMap.getUiSettings().setAttributionEnabled(false);
+//        mapboxMap.getUiSettings().setLogoEnabled(false);
+//        mapboxMap.setMaxZoomPreference(18);
+//
+//        MapEntriesVisible.get(0).setSelected(true);
+//        drawLineMap(MapEntries.get(0).getLatLngs(), true);
+//        mAdapter.notifyDataSetChanged();
+//    }
 }

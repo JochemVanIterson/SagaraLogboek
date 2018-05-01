@@ -40,8 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        android:tint="#FFF"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_map_24dp" />
+        app:srcCompat="@drawable/ic_boat" />
 
 </android.support.design.widget.CoordinatorLayout>

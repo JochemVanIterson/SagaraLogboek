@@ -73,7 +73,7 @@ public class SenderService extends Service implements GoogleApiClient.Connection
     int refresh_speed = 120000;
     int refresh_dist = 0;
 
-    boolean realtime = true;
+    boolean realtime = false;
 
     ArrayList<Location> locations = new ArrayList<>();
 
@@ -92,7 +92,7 @@ public class SenderService extends Service implements GoogleApiClient.Connection
             Log.e(TAG, "onStartCommand, ACTION_START");
 
             itemID = intent.getIntExtra("itemID", -1);
-            realtime = intent.getBooleanExtra("realtime", true);
+            //realtime = intent.getBooleanExtra("realtime", true);
             try {
                 data_start = new JSONObject(intent.getStringExtra("data_start"));
             } catch (JSONException e) {
@@ -118,7 +118,7 @@ public class SenderService extends Service implements GoogleApiClient.Connection
                     try {
                         LockFileContent.put("itemID", itemID);
                         LockFileContent.put("entryID", entryID);
-                        LockFileContent.put("realtime", realtime);
+                        //LockFileContent.put("realtime", realtime);
                         new FileHandler().WriteLockFile(this, LockFileContent);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -272,7 +272,7 @@ public class SenderService extends Service implements GoogleApiClient.Connection
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "onConnected");
-        createLocationGetter();
+        //createLocationGetter();
     }
 
     @Override

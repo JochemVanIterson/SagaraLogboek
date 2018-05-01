@@ -33,7 +33,7 @@ public class NGGetLocations {
                     //Log.d("itemObject", itemObject.toString(3));
                     //JSONArray entryObject = JsonResponse.optJSONArray("entry");
                     //Log.d("entryObject", entryObject.toString(3));
-                    ((BigMapActivity)activity).drawMarkers(JsonResponse);
+                    //((BigMapActivity)activity).drawMarkers(JsonResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("JSONException", response);

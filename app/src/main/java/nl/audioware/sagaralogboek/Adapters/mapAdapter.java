@@ -69,16 +69,13 @@ public class mapAdapter extends RecyclerView.Adapter<mapAdapter.ViewHolder> {
         holder.tv_user.setText(object.getUser().getFirstName() + " "+ object.getUser().getLastName());
         if(object.selected) holder.cardLin.setBackgroundColor(Color.LTGRAY);
         else holder.cardLin.setBackgroundColor(Color.TRANSPARENT);
-        holder.cardLin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i <mDataset.size() ; i++) {
-                    mDataset.get(i).setSelected(false);
-                }
-                mDataset.get(position).setSelected(true);
-                context.drawLineMap(mDataset.get(position).getLatLngs(), false);
-                notifyDataSetChanged();
+        holder.cardLin.setOnClickListener(v -> {
+            for (int i = 0; i <mDataset.size() ; i++) {
+                mDataset.get(i).setSelected(false);
             }
+            mDataset.get(position).setSelected(true);
+            //context.drawLineMap(mDataset.get(position).getLatLngs(), false);
+            notifyDataSetChanged();
         });
     }
 

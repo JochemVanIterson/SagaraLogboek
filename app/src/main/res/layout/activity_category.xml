@@ -41,9 +41,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        android:tint="#FFF"
         app:layout_anchor="@+id/swipeRefreshLayout"
         app:layout_anchorGravity="right|bottom"
-        app:srcCompat="@drawable/ic_map_24dp" />
+        app:srcCompat="@drawable/ic_boat" />
 
     <TextView
         android:id="@+id/emptyTextView"

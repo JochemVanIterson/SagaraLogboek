@@ -74,7 +74,7 @@ public class startDialog extends DialogFragment {
         }
 
         Switch SwitchKapot = view.findViewById(R.id.switch_kapot);
-        final Switch SwitchLocation = view.findViewById(R.id.switch_location);
+        //final Switch SwitchLocation = view.findViewById(R.id.switch_location);
         final EditText EditKapot = view.findViewById(R.id.editText_kapot);
         final EditText EditDiesel = view.findViewById(R.id.editText_diesel);
         EditKapot.setVisibility(View.GONE);
@@ -105,7 +105,7 @@ public class startDialog extends DialogFragment {
                         }
 
 
-                        senderServiceIntent.putExtra("realtime", SwitchLocation.isChecked());
+                        //senderServiceIntent.putExtra("realtime", SwitchLocation.isChecked());
                         senderServiceIntent.putExtra("itemID", itemID);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             getActivity().startForegroundService(senderServiceIntent);

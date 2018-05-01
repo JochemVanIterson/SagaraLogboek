@@ -9,9 +9,10 @@
     tools:context="nl.audioware.sagaralogboek.Activities.BigMapActivity"
     tools:showIn="@layout/activity_big_map">
 
-    <com.mapbox.mapboxsdk.maps.MapView
+    <!--<com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/big_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:mapbox_styleUrl="@string/mapbox_style_light" />
+        -->
 </LinearLayout>

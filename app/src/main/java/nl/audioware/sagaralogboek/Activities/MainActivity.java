@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences Settings = getSharedPreferences(getString(R.string.prefs_Main), Context.MODE_PRIVATE);
 
         // *********************** Fab button *********************** //
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            Intent BigMapIntent = new Intent(getApplicationContext(), BigMapActivity.class);
-            startActivity(BigMapIntent);
-        });
+        //FloatingActionButton fab = findViewById(R.id.fab);
+        //fab.setOnClickListener(view -> {
+        //    Intent BigMapIntent = new Intent(getApplicationContext(), BigMapActivity.class);
+        //    startActivity(BigMapIntent);
+        //});
 
         checkPermissions();
 
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onPrepareOptionsMenu(Menu menu) {
         invalidateOptionsMenu();
-        if(User_data.optInt("admin", 0)==1){
+        if(User_data!=null && User_data.optInt("admin", 0)==1){
             MenuItem item = (MenuItem) menu.findItem(R.id.action_admin);
             item.setVisible(true);
         }

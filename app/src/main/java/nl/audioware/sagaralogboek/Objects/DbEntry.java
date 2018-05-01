@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.github.mikephil.charting.data.Entry;
-import com.mapbox.mapboxsdk.geometry.LatLng;
+//import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +24,7 @@ public class DbEntry {
     private User user;
     private String device_id;
     private String type;
-    private ArrayList<LatLng> latLngs = new ArrayList<>();
+    //private ArrayList<LatLng> latLngs = new ArrayList<>();
     private JSONObject data_start;
     private JSONObject data_stop;
     private Date datetime_start;
@@ -95,7 +95,7 @@ public class DbEntry {
             //Log.d("Create_LocArray", i + "\n"+ tmpObject.toString(2));
             Double latitude = tmpObject.optDouble("latitude");
             Double longitude = tmpObject.optDouble("longitude");
-            latLngs.add(new LatLng(latitude, longitude));
+            //latLngs.add(new LatLng(latitude, longitude));
         }
     }
 
@@ -109,7 +109,7 @@ public class DbEntry {
     public String getDevice_id() {return device_id;}
     public String getType() {return type;}
     
-    public ArrayList<LatLng> getLatLngs() {return latLngs;}
+    //public ArrayList<LatLng> getLatLngs() {return latLngs;}
 
     public JSONObject getData_start() {return data_start;}
     public JSONObject getData_stop() {return data_stop;}
